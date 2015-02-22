@@ -153,6 +153,9 @@ public class WeatherContract {
         public static String getLocationSettingFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
+        public static String getLocationIDUri(Uri uri) {
+            return uri.getPathSegments().get(0);
+        }
 
         public static long getDateFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(2));

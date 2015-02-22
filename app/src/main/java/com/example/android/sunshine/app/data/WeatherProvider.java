@@ -254,10 +254,14 @@ public class WeatherProvider extends ContentProvider {
             case LOCATION: {
                 normalizeDate(values);
                 long _id = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
+                Log.d("2373", "2373cc New row id: " + _id);
                 if ( _id > 0 )
                     returnUri = WeatherContract.LocationEntry.buildLocationUri(_id);
-                else
+                else {
+                    Log.d("2373", "2373c New row id: " + _id);
                     throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+               // returnUri = WeatherContract.LocationEntry.buildLocationUri(_id);//delete after try 2373c
                 break;
             }
 

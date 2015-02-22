@@ -247,14 +247,48 @@ public class TestProvider extends AndroidTestCase {
     public void testUpdateLocation() {
         // Create a new map of values, where column names are the keys
         ContentValues values = TestUtilities.createNorthPoleLocationValues();
+        ContentValues values2 = TestUtilities.createNorthPoleLocationValues2();
+        ContentValues values3 = TestUtilities.createNorthPoleLocationValues3();
+
+        //ContentValues[] valuesArray=new ContentValues[]{values,values2};
+
+       // mContext.getContentResolver().bulkInsert(LocationEntry.CONTENT_URI,valuesArray);
+
+
 
         Uri locationUri = mContext.getContentResolver().
                 insert(LocationEntry.CONTENT_URI, values);
         long locationRowId = ContentUris.parseId(locationUri);
+        Log.d(LOG_TAG, "2373 v1 New row id: " + locationRowId);
+
+        Uri locationUri2 = mContext.getContentResolver().
+                insert(LocationEntry.CONTENT_URI, values2);
+        long locationRowId2 = ContentUris.parseId(locationUri2);
+        Log.d(LOG_TAG, "2373 v2 New row id: " + locationRowId2);
+
+        Uri locationUri3 = mContext.getContentResolver().
+                insert(LocationEntry.CONTENT_URI, values3);
+        long locationRowId3 = ContentUris.parseId(locationUri3);
+        Log.d(LOG_TAG, "2373 v3 New row id: " + locationRowId3);
+
+
+
+
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
-        Log.d(LOG_TAG, "New row id: " + locationRowId);
+        Log.d(LOG_TAG, "2373b New row id: " + locationRowId);
+
+        //test add another values so row id is total of 2 row:
+
+
+
+
+        // Verify we got a row back.
+        //assertTrue(locationRowId != -1);
+       // Log.d(LOG_TAG, "2373b New row id: " + locationRowId2);
+
+
 
         ContentValues updatedValues = new ContentValues(values);
         updatedValues.put(LocationEntry._ID, locationRowId);
