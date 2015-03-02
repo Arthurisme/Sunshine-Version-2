@@ -55,5 +55,3 @@ public class TestUriMatcher extends AndroidTestCase {
                 testMatcher.match(TEST_LOCATION_DIR), WeatherProvider.LOCATION);
     }
 }
-
-//push to github 4.07

@@ -19,7 +19,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import java.util.HashSet;
 
@@ -114,39 +113,40 @@ public class TestDb extends AndroidTestCase {
         also make use of the ValidateCurrentRecord function from within TestUtilities.  Return
         the rowId of the inserted location.
     */
-    public Long testLocationTable() {
-
+    public long testLocationTable() {
 
         // First step: Get reference to writable database
-        WeatherDbHelper theWeatherDbHelper=new WeatherDbHelper(mContext);
-        SQLiteDatabase db=theWeatherDbHelper.getWritableDatabase();
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Create ContentValues of what you want to insert
-        ContentValues testValues=TestUtilities.createNorthPoleLocationValues();
-
-
+        // Second Step: Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
 
-        // Insert ContentValues into database and get a row ID back
+        // Third Step: Insert ContentValues into database and get a row ID back
         long locationRowId;
-        locationRowId =db.insert(WeatherContract.LocationEntry.TABLE_NAME,null,testValues);
+        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
         assertTrue(locationRowId != -1);
-//        assertEquals(3,2);
-        Log.d(LOG_TAG, "2371 locationRowId : " + locationRowId);
 
+        // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
+        // the round trip.
 
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = db.query(
+                WeatherContract.LocationEntry.TABLE_NAME,  // Table to Query
+                null, // all columns
+                null, // Columns for the "where" clause
+                null, // Values for the "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null // sort order
+        );
 
-
-
-        // Query the database and receive a Cursor back
-         Cursor cursor=db.query(WeatherContract.LocationEntry.TABLE_NAME,
-                 null, // all columns
-                 null, // Columns for the "where" clause
-                 null, // Values for the "where" clause
-                 null, // columns to group by
-                 null, // columns to filter by row groups
-                 null // sort order
-                 );
         // Move the cursor to a valid database row and check to see if we got any records back
         // from the query
         assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
@@ -156,7 +156,7 @@ public class TestDb extends AndroidTestCase {
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
                 cursor, testValues);
-        // Return the rowId of the inserted location, or "-1" on failure.
+
         // Move the cursor to demonstrate that there is only one record in the database
         assertFalse( "Error: More than one record returned from location query",
                 cursor.moveToNext() );
@@ -176,7 +176,6 @@ public class TestDb extends AndroidTestCase {
         where you can use the "createWeatherValues" function.  You can
         also make use of the validateCurrentRecord function from within TestUtilities.
      */
-
     public void testWeatherTable() {
         // First step: Insert our location and get the row ID.
         // We return the rowId of the inserted location in testLocationTable, so

@@ -15,15 +15,20 @@
  */
 package com.example.android.sunshine.app;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
- * <p/>
+ * <p>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
@@ -32,9 +37,25 @@ import android.preference.PreferenceManager;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
+
+
+            ////not work- Show the Up button in the action bar.
+            //getActionBar().setDisplayHomeAsUpEnabled(true);
+            //getActionBar().setDisplayShowHomeEnabled(true);
+
+             //getActionBar().setDisplayUseLogoEnabled(true);
+            //getActionBar().setDisplayShowTitleEnabled(true);
+
+
+
         // Add 'general' preferences, defined in the XML file
         addPreferencesFromResource(R.xml.pref_general);
 

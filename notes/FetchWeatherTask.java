@@ -15,9 +15,11 @@
  */
 package com.example.android.sunshine.app;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -25,7 +27,9 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,9 +111,54 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
      */
     long addLocation(String locationSetting, String cityName, double lat, double lon) {
         // Students: First, check if the location with this city name exists in the db
-        // If it exists, return the current ID
+
+        Long returnLong=0L;
+
+        Cursor cvaddLocation=mContext.getContentResolver().query(
+                WeatherContract.LocationEntry.CONTENT_URI,
+                null,
+                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING+"=?" ,
+                new String[]{locationSetting},
+                null
+
+        );
+        cvaddLocation.moveToFirst();
+        boolean noExistCity=true;
+        for(int i=0;i<cvaddLocation.getCount();i++)
+        {
+            Log.v(LOG_TAG, "2378 getString(1): " + cvaddLocation.getString(1));
+            if(cvaddLocation.getString(1).equals( locationSetting)){
+
+                noExistCity=false;
+                // If it exists, return the current ID
+                returnLong= Long.parseLong(cvaddLocation.getString(0));
+            }
+
+            cvaddLocation.moveToNext();
+        }
+
+
+
         // Otherwise, insert it using the content resolver and the base URI
-        return 0;
+        if(noExistCity){
+
+            //put loaction to Values map:
+            ContentValues testValues = new ContentValues();
+            testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
+            testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+            testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+            testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+
+            Uri insertValueURI=mContext.getContentResolver().insert(WeatherContract.LocationEntry.CONTENT_URI,testValues);
+
+            Long insertValueID= ContentUris.parseId(insertValueURI);
+            returnLong=insertValueID;
+
+        }
+        Log.d(LOG_TAG, "2378 returnID: " + returnLong);
+
+        cvaddLocation.close();
+        return returnLong;
     }
 
     /*
@@ -151,6 +200,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // These are the names of the JSON objects that need to be extracted.
 
         // Location information
+        //name the keywords jason
         final String OWM_CITY = "city";
         final String OWM_CITY_NAME = "name";
         final String OWM_COORD = "coord";
@@ -266,6 +316,10 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // add to database
             if ( cVVector.size() > 0 ) {
                 // Student: call bulkInsert to add the weatherEntries to the database here
+                ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                cVVector.toArray(cvArray);
+                mContext.getContentResolver().bulkInsert(WeatherEntry.CONTENT_URI,cvArray);
+
             }
 
             // Sort order:  Ascending, by date.

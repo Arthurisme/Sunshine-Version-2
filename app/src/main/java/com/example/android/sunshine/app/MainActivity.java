@@ -32,6 +32,13 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //not work---show logo etc.
+       getSupportActionBar().setDisplayShowHomeEnabled(true);
+       getSupportActionBar().setLogo(R.drawable.ic_launcher);
+       getSupportActionBar().setDisplayUseLogoEnabled(true);
+       getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -68,11 +75,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void openPreferredLocationInMap() {
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        String location = sharedPrefs.getString(
-                getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
+
+        String location = Utility.getPreferredLocation(this);
 
         // Using the URI scheme for showing a location found on a map.  This super-handy
         // intent can is detailed in the "Common Intents" page of Android's developer site:
@@ -84,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
 
+        //what is this?
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {

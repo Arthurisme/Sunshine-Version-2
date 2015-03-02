@@ -76,27 +76,6 @@ public class TestUtilities extends AndroidTestCase {
 
         return testValues;
     }
-    static ContentValues createNorthPoleLocationValues2() {
-        // Create a new map of values, where column names are the keys
-        ContentValues testValues = new ContentValues();
-        //static final String TEST_LOCATION = ;
-        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, "99706");
-        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole2");
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7478);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-
-        return testValues;
-    }
-    static ContentValues createNorthPoleLocationValues3() {
-        // Create a new map of values, where column names are the keys
-        ContentValues testValues = new ContentValues();
-        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, "99707");
-        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole3");
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-
-        return testValues;
-    }
 
     /*
         Students: You can uncomment this function once you have finished creating the

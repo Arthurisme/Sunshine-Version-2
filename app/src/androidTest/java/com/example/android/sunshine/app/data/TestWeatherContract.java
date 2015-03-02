@@ -17,6 +17,7 @@ package com.example.android.sunshine.app.data;
 
 import android.net.Uri;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 /*
     Students: This is NOT a complete test for the WeatherContract --- just for the functions
@@ -33,6 +34,7 @@ public class TestWeatherContract extends AndroidTestCase {
      */
     public void testBuildWeatherLocation() {
         Uri locationUri = WeatherContract.WeatherEntry.buildWeatherLocation(TEST_WEATHER_LOCATION);
+        Log.d("2381", "2381-test uri build: " + locationUri);
         assertNotNull("Error: Null Uri returned.  You must fill-in buildWeatherLocation in " +
                         "WeatherContract.",
                 locationUri);
@@ -41,5 +43,11 @@ public class TestWeatherContract extends AndroidTestCase {
         assertEquals("Error: Weather location Uri doesn't match our expected result",
                 locationUri.toString(),
                 "content://com.example.android.sunshine.app/weather/%2FNorth%20Pole");
+    }
+
+    public void testBuildWeatherLocationWithStartDate() {
+        Uri locationWithStartDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(TEST_WEATHER_LOCATION,TEST_WEATHER_DATE);
+        Log.d("2381", "2381-test uri build: " + locationWithStartDateUri);
+
     }
 }
