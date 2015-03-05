@@ -35,10 +35,10 @@ public class ForecastAdapter extends CursorAdapter {
      */
     private String convertCursorRowToUXFormat(Cursor cursor) {
         // get row indices for our cursor
-        int idx_max_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP);
-        int idx_min_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP);
-        int idx_date = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
-        int idx_short_desc = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC);
+//        int idx_max_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP);
+//        int idx_min_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP);
+//        int idx_date = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
+//        int idx_short_desc = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC);
 
         String highAndLow = formatHighLows(
                 cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP),
@@ -46,18 +46,19 @@ public class ForecastAdapter extends CursorAdapter {
 
 
 
-        //try curse:
-         cursor.moveToFirst();
-        for(int i = 0; i < cursor.getCount()-1; i++) {
-            String y="";
-            for(int i2 = 0; i2 < 9; i2++) {
-
-                y  = y+cursor.getString(i2)+", ";
-            }
-            Log.d("2384 c", "2384,cur to string: " + y+"\n");
-            //Log.d("2384 a", "2384,cur to string: " + y);
-            cursor.moveToNext();
-        }
+//        //try curse:
+//         cursor.moveToFirst();
+//        for(int i = 0; i < cursor.getCount()-1; i++) {
+//            String y="";
+//            for(int i2 = 0; i2 < 9; i2++) {
+//
+//                y  = y+cursor.getString(i2)+", ";
+//            }
+//            Log.d("2384 c", "2384,cur to string: " + y+"\n");
+//            //Log.d("2384 a", "2384,cur to string: " + y);
+//            cursor.moveToNext();
+//        }
+//        cursor.moveToFirst();//if not move to first , the app will have a date+13
 
 
         Log.d("2384 c", "2384,cur to string: " + 1);
@@ -83,18 +84,19 @@ public class ForecastAdapter extends CursorAdapter {
 
 
 
-        //try curse:
-         cursor.moveToFirst();
-        for(int i = 0; i < cursor.getCount()-1; i++) {
-            String y="";
-            for(int i2 = 0; i2 < 9; i2++) {
-
-                y  = y+cursor.getString(i2)+", ";
-            }
-            Log.d("2384 d", "2384,cur to string: " + y+"\n");
-            //Log.d("2384 a", "2384,cur to string: " + y);
-            cursor.moveToNext();
-        }
+//        //try curse:
+//         cursor.moveToFirst();
+//        for(int i = 0; i < cursor.getCount()-1; i++) {
+//            String y="";
+//            for(int i2 = 0; i2 < 9; i2++) {
+//
+//                y  = y+cursor.getString(i2)+", ";
+//            }
+//            Log.d("2384 d", "2384,cur to string: " + y+"\n");
+//            //Log.d("2384 a", "2384,cur to string: " + y);
+//            cursor.moveToNext();
+//        }
+//        cursor.moveToFirst();//if not move to first , the app will have a date+13
 
 
 
@@ -115,19 +117,20 @@ public class ForecastAdapter extends CursorAdapter {
         tv.setText(convertCursorRowToUXFormat(cursor));
         //tv.setText("same");
 
-        //try curse:
-
-        cursor.moveToFirst();
-        for(int i = 0; i < cursor.getCount()-1; i++) {
-            String y="";
-            for(int i2 = 0; i2 < 9; i2++) {
-
-                y  = y+cursor.getString(i2)+", ";
-            }
-            Log.d("2384 e", "2384,cur to string: " + y+"\n");
-            //Log.d("2384 a", "2384,cur to string: " + y);
-            cursor.moveToNext();
-        }
+//        //try curse:
+//
+//        cursor.moveToFirst();
+//        for(int i = 0; i < cursor.getCount()-1; i++) {
+//            String y="";
+//            for(int i2 = 0; i2 < 9; i2++) {
+//
+//                y  = y+cursor.getString(i2)+", ";
+//            }
+//            Log.d("2384 e", "2384,cur to string: " + y+"\n");
+//            //Log.d("2384 a", "2384,cur to string: " + y);
+//            cursor.moveToNext();
+//        }
+//        cursor.moveToFirst();//if not move to first , the app will have a date+13
 
 
         Log.d("2384 e", "2384,cur to string: " + 1);

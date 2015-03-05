@@ -177,6 +177,8 @@ public class DetailActivity extends ActionBarActivity  {
 
 
 
+            Log.d("2390", "2390:intent.getData() " + intent.getData().toString() );
+
                 return new CursorLoader(
                         getActivity(),
                         intent.getData(),
@@ -185,19 +187,40 @@ public class DetailActivity extends ActionBarActivity  {
                         null,
                         null);
 
+
         }
+
+
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            if (!data.moveToFirst()) {
-               return;
+            Log.v(LOG_TAG, "In onLoadFinished");
+            if (!data.moveToFirst()) { return; }
+
+            String dateString = Utility.formatDate(
+                    data.getLong(COL_WEATHER_DATE));
+
+            String weatherDescription =
+                    data.getString(COL_WEATHER_DESC);
+
+            boolean isMetric = Utility.isMetric(getActivity());
+
+            String high = Utility.formatTemperature(
+                    data.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
+
+            String low = Utility.formatTemperature(
+                    data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+
+            mForecast = String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
+
+            TextView detailTextView = (TextView)getView().findViewById(R.id.detail_text);
+            detailTextView.setText(mForecast);
+
+            // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
-
-            String x=data.getString(COL_WEATHER_DESC);
-
-            TextView detialTextView=(TextView)getView().findViewById(R.id.detail_text);
-            detialTextView.setText(x);
 
         }
 

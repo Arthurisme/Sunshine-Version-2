@@ -16,6 +16,7 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
+import com.example.android.sunshine.app.data.WeatherProvider;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
@@ -131,6 +133,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                     locationSetting, cursor.getLong(COL_WEATHER_DATE)));
                     startActivity(intent);
+
+                    //test buildWeatherLocationStartDate march int is?
+                    UriMatcher sUriMatchertesta = WeatherProvider.buildUriMatcher();
+                    int matcha = sUriMatchertesta.match(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                            locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+                    Log.d("2391", "2391 Tt :buildWeatherLocationWithDate " + WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                            locationSetting, cursor.getLong(COL_WEATHER_DATE)).toString());
+                    Log.d("2391", "2391 Tt :match buildWeatherLocationWithDate " + matcha);
+
                 }
 
 
@@ -147,18 +158,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         super.onActivityCreated(savedInstanceState);
     }
 
+  // since we read the location when we create the loader, all we need to do is restart things
+         void onLocationChanged( ) {
+          updateWeather();
+          getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+      }
+
+
     private void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+        weatherTask.execute(location);//move this line for test
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateWeather();
-    }
+//   @Override
+//    public void onStart() {
+//        super.onStart();
+//        updateWeather();
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -179,18 +197,26 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 null,
                 sortOrder);
 
-        //try curse:
-        cur.moveToFirst();
-        for (int i = 0; i < cur.getCount(); i++) {
-            String y = "";
-            for (int i2 = 0; i2 < 9; i2++) {
+//test buildWeatherLocationWithStartDate march int is?
+        UriMatcher sUriMatchertest = WeatherProvider.buildUriMatcher();
+        int match = sUriMatchertest.match(weatherForLocationUri);
+        Log.d("2391", "2391 T :buildWeatherLocationWithStartDate " + weatherForLocationUri.toString());
+        Log.d("2391", "2391 T :match buildWeatherLocationWithStartDate " + match);
 
-                y = y + cur.getString(i2) + ", ";
-            }
-            Log.d("2384 a", "2384,cur to string: " + y + "\n");
-            //Log.d("2384 a", "2384,cur to string: " + y);
-            cur.moveToNext();
-        }
+//        //try curse:
+//        cur.moveToFirst();
+//        for (int i = 0; i < cur.getCount(); i++) {
+//            String y = "";
+//            for (int i2 = 0; i2 < 9; i2++) {
+//
+//                y = y + cur.getString(i2) + ", ";
+//            }
+//            Log.d("2384 a", "2384,cur to string: " + y + "\n");
+//            //Log.d("2384 a", "2384,cur to string: " + y);
+//            cur.moveToNext();
+//        }
+//        cur.moveToFirst();//if not move to first , the app will have a date+13
+
         Log.d("2384 a", "2384,url: " + weatherForLocationUri);
 
         Log.d("2384 a", "2384,cur to string: " + 1);
@@ -210,17 +236,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
 
-        //try curse:
-        data.moveToFirst();
-        for (int i = 0; i < data.getCount(); i++) {
-            String y = "";
-            for (int i2 = 0; i2 < 9; i2++) {
-                y = y + data.getString(i2) + ", ";
-            }
-            Log.d("2384 b", "2384,cur to string: " + y + "\n");
-            //Log.d("2384 a", "2384,cur to string: " + y);
-            data.moveToNext();
-        }
+//        //try curse:
+//        data.moveToFirst();
+//        for (int i = 0; i < data.getCount(); i++) {
+//            String y = "";
+//            for (int i2 = 0; i2 < 9; i2++) {
+//                y = y + data.getString(i2) + ", ";
+//            }
+//            Log.d("2384 b", "2384,cur to string: " + y + "\n");
+//            //Log.d("2384 a", "2384,cur to string: " + y);
+//            data.moveToNext();
+//        }
+//        data.moveToFirst();//if not move to first , the app will have a date+13
 
         Log.d("2384 b", "2384,cur to string: " + 1);
 

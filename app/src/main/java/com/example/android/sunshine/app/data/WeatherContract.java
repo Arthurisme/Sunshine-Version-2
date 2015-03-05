@@ -20,6 +20,7 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.format.Time;
+import android.util.Log;
 
 /**
  * Defines table and column names for the weather database.
@@ -140,13 +141,19 @@ public class WeatherContract {
         public static Uri buildWeatherLocationWithStartDate(
                 String locationSetting, long startDate) {
             long normalizedDate = normalizeDate(startDate);
-            return CONTENT_URI.buildUpon().appendPath(locationSetting)
+               Uri uribuildWeatherLocationWithStartDate=CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
+
+            Log.d("2390", "2390:buildWeatherLocationWithStartDate " + uribuildWeatherLocationWithStartDate.toString());
+            return uribuildWeatherLocationWithStartDate;
         }
 
         public static Uri buildWeatherLocationWithDate(String locationSetting, long date) {
-            return CONTENT_URI.buildUpon().appendPath(locationSetting)
+           Uri uribuildWeatherLocationWithDate=
+             CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendPath(Long.toString(normalizeDate(date))).build();
+            Log.d("2390", "2390:buildWeatherLocationWithDate " + uribuildWeatherLocationWithDate.toString());
+            return uribuildWeatherLocationWithDate;
         }
 
         public static String getLocationSettingFromUri(Uri uri) {

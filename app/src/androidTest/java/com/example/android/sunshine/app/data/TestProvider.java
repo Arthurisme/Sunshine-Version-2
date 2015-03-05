@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract.LocationEntry;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
 
@@ -396,6 +397,7 @@ public class TestProvider extends AndroidTestCase {
     // Student: Uncomment this test after you have completed writing the delete functionality
     // in your provider.  It relies on insertions with testInsertReadProvider, so insert and
     // query functionality must also be complete before this test can be used.
+
     public void testDeleteRecords() {
         testInsertReadProvider();
 
@@ -509,5 +511,25 @@ public class TestProvider extends AndroidTestCase {
                     cursor, bulkInsertContentValues[i]);
         }
         cursor.close();
+    }
+
+    public void testQuary() {
+        String locationSetting = Utility.getPreferredLocation(mContext);
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        //previously using Cursor: try test all rows:
+        Cursor cur = mContext.getContentResolver().query(
+                weatherForLocationUri,
+                null,
+                null,
+                null,
+                sortOrder);
+        Log.d("2390", "2390 T :buildWeatherLocationWithStartDate " + weatherForLocationUri.toString());
+
+
     }
 }

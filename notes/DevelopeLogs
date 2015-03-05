@@ -1,2 +1,9 @@
-One question is :
-on the 4.22, why setting-loction can not pass change to detail view?
+//One question is :
+//on the 4.22, why setting-loction can not pass change to detail view?
+
+2
+To open a new window(view), it is said using a intent. so if i using a new windows.class, what happen.
+
+3
+which 2384 testing have make all date is same in listview?
+
