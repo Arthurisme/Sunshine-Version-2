@@ -10,3 +10,7 @@ which 2384 testing have make all date is same in listview?
 4
 I do add a cusoradapter to show the same listview in detailActivity as in MainActivity(ForecastFragment)
 
+5
+viewType = getItemViewType(cursor.getPosition());   do  a study
+result: if one of the listview need have different view showing,   using getItemViewType assign this
+listview item with a different view.
