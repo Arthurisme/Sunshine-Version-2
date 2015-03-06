@@ -7,3 +7,6 @@ To open a new window(view), it is said using a intent. so if i using a new windo
 3
 which 2384 testing have make all date is same in listview?
 
+4
+I do add a cusoradapter to show the same listview in detailActivity as in MainActivity(ForecastFragment)
+
