@@ -181,6 +181,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        //updateWeather();
+
 
         String locationSetting = Utility.getPreferredLocation(getActivity());
 

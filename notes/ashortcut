@@ -1,5 +1,8 @@
 cd /data/data/com.example.android.sunshine.app/databases
 
+C:\Users\Emilie\AppData\Local\Android\sdk\tools
+
+
 Log.d("2398 a", "2398,xliff: " + String);
 
 /URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");

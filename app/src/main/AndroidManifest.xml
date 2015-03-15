@@ -4,7 +4,7 @@
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_DEBUG_APP"></uses-permission>
+    <uses-permission android:name="android.permission.SET_DEBUG_APP"/>
 
     <application
 
@@ -39,7 +39,7 @@
         </activity>
         <provider
             android:authorities="com.example.android.sunshine.app"
-            android:name=".data.WeatherProvider" />
+        android:name=".data.WeatherProvider" />
     </application>
 
 </manifest>

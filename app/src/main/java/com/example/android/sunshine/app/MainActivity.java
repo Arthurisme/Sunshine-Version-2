@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.debug.hv.ViewServer;
+
 public class MainActivity extends ActionBarActivity {
 
     String mLocation;
@@ -49,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
 
+        ViewServer.get(this).addWindow(this);
 
     }
 
@@ -113,5 +116,11 @@ public class MainActivity extends ActionBarActivity {
                              }
                          mLocation = location;
                      }
+        ViewServer.get(this).setFocusedWindow(this);
     }
+
+    public void onDestroy() {
+                  super.onDestroy();
+                  ViewServer.get(this).removeWindow(this);
+              }
 }
