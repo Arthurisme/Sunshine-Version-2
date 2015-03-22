@@ -11,7 +11,8 @@
         android:weightSum="1">
 
         <!-- test previously detailview text -->
-        <TextView android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
             android:id="@+id/detail_text"
             android:layout_height="wrap_content" />
 
@@ -26,7 +27,7 @@
             android:id="@+id/detail_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="June 24"/>
+            android:text="June 24" />
 
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout
@@ -45,7 +46,7 @@
                     android:id="@+id/detail_high_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21°"/>
+                    android:text="21°" />
 
                 <TextView
                     android:id="@+id/detail_low_textview"

@@ -24,6 +24,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     public static class ViewHolder {
         public final ImageView iconView;
+         public final ImageView iconView_big;
         public final TextView dateView;
         public final TextView descriptionView;
         public final TextView highTempView;
@@ -31,6 +32,8 @@ public class ForecastAdapter extends CursorAdapter {
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
+            iconView_big = (ImageView) view.findViewById(R.id.list_item_icon_big);
+
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
@@ -71,18 +74,55 @@ public class ForecastAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        // Read weather forecast from cursor
+        String description = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        // Find TextView and set weather forecast on it
+        viewHolder.descriptionView.setText(description);
+
+
+
+        int weatherId =( cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID));
+
+        int viewType = getItemViewType(cursor.getPosition());
+        //int layoutId = -1;
+        switch (viewType) {
+            case VIEW_TYPE_TODAY: {
+
+                int weatherImage_big ;
+
+                weatherImage_big= Utility.getArtResourceForWeatherCondition(  weatherId);
+
+
+                viewHolder.iconView_big.setImageResource(weatherImage_big);
+
+
+                break;
+            }
+            case VIEW_TYPE_FUTURE_DAY: {
+                int weatherImage ;
+
+                weatherImage= Utility.getIconResourceForWeatherCondition(  weatherId);
+
+
+                viewHolder.iconView.setImageResource(weatherImage);
+
+                break;
+            }
+        }
+
+
+
+
+
         // Use placeholder image for now
-        viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
+        //viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
+
 
         // Read date from cursor
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         // Find TextView and set formatted date on it
         viewHolder.dateView.setText(Utility.getFriendlyDayString(context, dateInMillis));
 
-        // Read weather forecast from cursor
-        String description = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
-        // Find TextView and set weather forecast on it
-        viewHolder.descriptionView.setText(description);
 
         // Read user preference for metric or imperial temperature units
         boolean isMetric = Utility.isMetric(context);
@@ -105,4 +145,6 @@ public class ForecastAdapter extends CursorAdapter {
     public int getViewTypeCount() {
         return VIEW_TYPE_COUNT;
     }
+
+
 }

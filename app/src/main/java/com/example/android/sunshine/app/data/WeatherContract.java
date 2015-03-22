@@ -52,6 +52,8 @@ public class WeatherContract {
         Time time = new Time();
         time.setToNow();
         int julianDay = Time.getJulianDay(startDate, time.gmtoff);
+        Log.d("2602", "2602 normalizeDate format " +  time.setJulianDay(julianDay));
+
         return time.setJulianDay(julianDay);
     }
 
@@ -105,7 +107,7 @@ public class WeatherContract {
         // Date, stored as long in milliseconds since the epoch
         public static final String COLUMN_DATE = "date";
         // Weather id as returned by API, to identify the icon to be used
-        public static final String COLUMN_WEATHER_ID = "weather_id";
+        public static final String COLUMN_WEATHER_CONDITION_ID = "weather_id";
 
         // Short description and long description of the weather, as provided by API.
         // e.g "clear" vs "sky is clear".
@@ -128,14 +130,22 @@ public class WeatherContract {
         public static final String COLUMN_DEGREES = "degrees";
 
         public static Uri buildWeatherUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+            Uri uribuildWeather=ContentUris.withAppendedId(CONTENT_URI, id);
+            Log.d("2601", "2601 build uri:buildWeatherLocation " + uribuildWeather.toString());
+
+            return uribuildWeather;
         }
 
         /*
             Student: This is the buildWeatherLocation function you filled in.
          */
         public static Uri buildWeatherLocation(String locationSetting) {
-            return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
+
+            Uri uribuildWeatherLocation=CONTENT_URI.buildUpon().appendPath(locationSetting).build();
+            Log.d("2601", "2601 build uri:buildWeatherLocation " + uribuildWeatherLocation.toString());
+
+            return uribuildWeatherLocation;
+
         }
 
         public static Uri buildWeatherLocationWithStartDate(
@@ -144,7 +154,7 @@ public class WeatherContract {
                Uri uribuildWeatherLocationWithStartDate=CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
 
-            Log.d("2390", "2390:buildWeatherLocationWithStartDate " + uribuildWeatherLocationWithStartDate.toString());
+            Log.d("2601", "2601 build uri:buildWeatherLocationWithStartDate " + uribuildWeatherLocationWithStartDate.toString());
             return uribuildWeatherLocationWithStartDate;
         }
 
@@ -152,7 +162,7 @@ public class WeatherContract {
            Uri uribuildWeatherLocationWithDate=
              CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendPath(Long.toString(normalizeDate(date))).build();
-            Log.d("2390", "2390:buildWeatherLocationWithDate " + uribuildWeatherLocationWithDate.toString());
+            Log.d("2601", "2601 build uri:buildWeatherLocationWithDate " + uribuildWeatherLocationWithDate.toString());
             return uribuildWeatherLocationWithDate;
         }
 

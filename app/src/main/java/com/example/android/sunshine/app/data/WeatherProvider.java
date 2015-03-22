@@ -57,7 +57,8 @@ public class WeatherProvider extends ContentProvider {
     private static final String sLocationSettingWithStartDateSelection =
             WeatherContract.LocationEntry.TABLE_NAME+
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+                    //WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+    WeatherContract.WeatherEntry.COLUMN_DATE +" >= ? ";
 
     private static final String sLocationSettingAndDaySelection =
             WeatherContract.LocationEntry.TABLE_NAME +
@@ -68,7 +69,10 @@ public class WeatherProvider extends ContentProvider {
         String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
         long startDate = WeatherContract.WeatherEntry.getStartDateFromUri(uri);
 
-        String[] selectionArgs;
+        Log.d("2603", "2603 : start Date format " + startDate);
+
+
+                String[] selectionArgs;
         String selection;
 
         if (startDate == 0) {
