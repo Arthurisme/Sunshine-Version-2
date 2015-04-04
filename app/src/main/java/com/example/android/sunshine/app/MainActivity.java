@@ -21,13 +21,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.debug.hv.ViewServer;
+import java.net.URISyntaxException;
 
-public class MainActivity extends ActionBarActivity {
+
+import com.android.debug.hv.ViewServer;
+import com.example.android.sunshine.app.data.WeatherContract;
+
+import java.net.URI;
+
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     String mLocation;
     //private final String FORECASTFRAGMENT_TAG = "FFTAG";
@@ -41,10 +48,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
 
-       getSupportActionBar().setDisplayShowHomeEnabled(true);
-       getSupportActionBar().setLogo(R.drawable.ic_launcher);
-       getSupportActionBar().setDisplayUseLogoEnabled(true);
-       getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         setContentView(R.layout.activity_main);
 
@@ -56,11 +63,59 @@ public class MainActivity extends ActionBarActivity {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            if (savedInstanceState == null) {
+//            if (savedInstanceState == null) {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+//                        .commit();
+//            }
+
+
+            //show default detail information:
+
+            //get uri of taday:
+            long dateTime;
+            Time dayTime = new Time();
+            Log.d("2403", "2403 : Main-dayTime1: " + dayTime);
+            dayTime.setToNow();
+            Log.d("2403", "2403 : Main-dayTime2: " + dayTime);
+            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+            Log.d("2403", "2403 : Main-julianStartDay: " + julianStartDay);
+            //dayTime = new Time();
+            Log.d("2403", "2403 : Main-dayTime3: " + dayTime);
+            dateTime = dayTime.setJulianDay(julianStartDay);
+            Log.d("2403", "2403 : Main-dateTime: " + dateTime);
+
+            String locationSetting = Utility.getPreferredLocation(this.getApplication());
+            Uri uriDefault= WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, dateTime);
+            Log.d("2403", "2403 : Main-uriDefault: " + uriDefault);
+
+
+                //Uri uriDefault =  Uri.parse("content://com.example.android.sunshine.app/weather/94043/1427601600000");
+                //System.out.println("URI created: " + uri);
+                Bundle argsDefault = new Bundle();
+                argsDefault.putParcelable(DetailFragment.DETAIL_URI, uriDefault);
+
+                DetailFragment fragment = new DetailFragment();//line F2703
+                fragment.setArguments(argsDefault);
+
+
+
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG) //fragment that have a tag name as mentioned, from DetailFragment F2703 but not a new one.
+                                //try :
+                                //.replace(R.id.weather_detail_container, new DetailFragment(), "tt")
+
                         .commit();
-            }
+
+
+
+
+
+
+
+
+
+
         } else {
             mTwoPane = false;
         }
@@ -116,23 +171,69 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        String location = Utility.getPreferredLocation( this );
+//                 // update the location in our second pane using the fragment manager
+//                         if (location != null && !location.equals(mLocation)) {
+//                         ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+//                         if ( null != ff ) {
+//                                 ff.onLocationChanged();
+//                             }
+//                         mLocation = location;
+//                     }
+//        ViewServer.get(this).setFocusedWindow(this);
+//    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        String location = Utility.getPreferredLocation( this );
-                 // update the location in our second pane using the fragment manager
-                         if (location != null && !location.equals(mLocation)) {
-                         ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-                         if ( null != ff ) {
-                                 ff.onLocationChanged();
-                             }
-                         mLocation = location;
-                     }
-        ViewServer.get(this).setFocusedWindow(this);
+        String location = Utility.getPreferredLocation(this);
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (null != ff) {
+                ff.onLocationChanged();
+            }
+            DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if (null != df) {
+                df.onLocationChanged(location);
+            }
+            mLocation = location;
+        }
     }
 
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
+
+            DetailFragment fragment = new DetailFragment();//line F2703
+            fragment.setArguments(args);
+            Log.d("2403", "2403 :onItemSelected(Uri contentUri)" + contentUri);
+
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG) //fragment that have a tag name as mentioned, from DetailFragment F2703 but not a new one.
+                            //try :
+                            //.replace(R.id.weather_detail_container, new DetailFragment(), "tt")
+
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
+        }
+    }
+
+
     public void onDestroy() {
-                  super.onDestroy();
-                  ViewServer.get(this).removeWindow(this);
-              }
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+    }
 }
