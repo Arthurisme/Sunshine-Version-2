@@ -249,6 +249,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
             mUri = updatedUri;
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+
+
         }
     }
 }
