@@ -20,6 +20,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -45,6 +46,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private static final int FORECAST_LOADER = 0;
     private ForecastAdapter mForecastAdapter;
+      private ListView mListView;
+      private int mPosition = ListView.INVALID_POSITION;
+    //private Parcelable mListViewScrollPos = null;
+
+    private static final String SELECTED_KEY = "selected_position";
 
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -117,9 +123,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
 
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
@@ -128,11 +137,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
+        mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        mListView.setAdapter(mForecastAdapter);
 
         //when click on listview:
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
@@ -157,13 +166,40 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     Log.d("2391", "2391 Tt :match buildWeatherLocationWithDate " + matcha);
 
                 }
+                mPosition=position;
 
 
             }
         });
+        // get the position and color from the instance
+        // state we saved in onSaveInstanceState
+        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+
+        }
 
         return rootView;
     }
+
+    //try 5.12
+
+
+
+    @Override
+         public void onSaveInstanceState(Bundle saveInstance) {
+                 // When tablets rotate, the currently selected list item needs to be saved.
+                         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
+                                // so check for that before storing.
+                                         if (mPosition != ListView.INVALID_POSITION) {
+                         saveInstance.putInt(SELECTED_KEY, mPosition);
+                     }
+                super.onSaveInstanceState(saveInstance);
+             }
+
+
+
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -253,6 +289,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
+                if (mPosition != ListView.INVALID_POSITION) {
+                         // If we don't need to restart the loader, and there's a desired position to restore
+                                // to, do so now.
+                                       mListView.smoothScrollToPosition(mPosition);
+                    }
 
 //        //try curse:
 //        data.moveToFirst();
