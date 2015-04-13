@@ -48,6 +48,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private ForecastAdapter mForecastAdapter;
       private ListView mListView;
       private int mPosition = ListView.INVALID_POSITION;
+    private boolean mUseTodayLayout ;
+
     //private Parcelable mListViewScrollPos = null;
 
     private static final String SELECTED_KEY = "selected_position";
@@ -123,6 +125,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         return super.onOptionsItemSelected(item);
     }
 
+    public void setUseTodayLayout(boolean bUseTodayLayoutFromParent) {
+        mUseTodayLayout=bUseTodayLayoutFromParent;
+        if (mForecastAdapter != null){
+            mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -177,6 +185,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
 
         }
+
+        mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+
 
         return rootView;
     }
