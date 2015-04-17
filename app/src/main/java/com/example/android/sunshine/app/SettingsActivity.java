@@ -47,9 +47,8 @@ public class SettingsActivity extends PreferenceActivity
 
 
 
-
             ////not work- Show the Up button in the action bar.
-            //getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //getActionBar().setDisplayShowHomeEnabled(true);
 
              //getActionBar().setDisplayUseLogoEnabled(true);

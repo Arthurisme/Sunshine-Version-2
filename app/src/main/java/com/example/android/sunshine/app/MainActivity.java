@@ -49,9 +49,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        //getSupportActionBar().setLogo(R.drawable.ic_logo);
+        //getSupportActionBar().setDisplayUseLogoEnabled(true);
+         //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         setContentView(R.layout.activity_main);
 
@@ -118,6 +118,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
         } else {
             mTwoPane = false;
+            getSupportActionBar().setElevation(0f);
         }
 
         ForecastFragment forecastFragmentForUseTodayLayout=(ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);

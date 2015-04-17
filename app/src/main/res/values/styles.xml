@@ -3,6 +3,33 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+
+    </style>
+
+
+    <style name="ForecastTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:colorPrimary">@color/sunshine_blue</item>
+        <item name="android:colorPrimaryDark">@color/sunshine_darkblue</item>
+
+
+        <!-- Support library compatibility -->
+        <item name="colorPrimary">@color/sunshine_blue</item>
+        <item name="colorPrimaryDark">@color/sunshine_darkblue</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+
+        <item name="logo">@drawable/ic_logo</item>
+        <item name="displayOptions">useLogo|showHome</item>
+
+
+
     </style>
 
     <style name="ForecastListStyle">
