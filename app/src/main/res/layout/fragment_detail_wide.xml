@@ -92,7 +92,7 @@
 
             <com.example.android.sunshine.app.data.WindControl
                 android:id="@+id/detail_wind_windControl"
-                android:layout_height="wrap_content"
+                android:layout_height="200px"
                 android:layout_width="200px"
                 android:layout_marginLeft="16dp"
                 android:minWidth="100px"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="100px"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="16dp"
                 android:minWidth="100px"
                 android:minHeight="100px"/>
         </LinearLayout>
