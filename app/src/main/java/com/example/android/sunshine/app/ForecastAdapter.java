@@ -25,7 +25,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     public static class ViewHolder {
         public final ImageView iconView;
-         public final ImageView iconView_big;
+        // public final ImageView iconView_big;
         public final TextView dateView;
         public final TextView descriptionView;
         public final TextView highTempView;
@@ -33,7 +33,7 @@ public class ForecastAdapter extends CursorAdapter {
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
-            iconView_big = (ImageView) view.findViewById(R.id.list_item_icon_big);
+            //iconView_big = (ImageView) view.findViewById(R.id.list_item_icon_big);
 
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
@@ -80,6 +80,9 @@ public class ForecastAdapter extends CursorAdapter {
         // Find TextView and set weather forecast on it
         viewHolder.descriptionView.setText(description);
 
+        // For accessibility, add a content description to the icon field
+              viewHolder.iconView.setContentDescription(description);
+
 
 
         int weatherId =( cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID));
@@ -94,7 +97,7 @@ public class ForecastAdapter extends CursorAdapter {
                 weatherImage_big= Utility.getArtResourceForWeatherCondition(  weatherId);
 
 
-                viewHolder.iconView_big.setImageResource(weatherImage_big);
+                viewHolder.iconView.setImageResource(weatherImage_big);
 
 
                 break;

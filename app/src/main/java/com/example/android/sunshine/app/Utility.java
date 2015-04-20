@@ -56,13 +56,13 @@ public class Utility {
         } else {
             temp = temperature;
         }
-        int formatId_t = R.string.format_tempature;
+        int formatId_t = R.string.format_temperature;
         // return String.format("%.0f"+"°C", temp);
         return
                 //String.format
                 (context.getString(
                         formatId_t,
-                        (int) temp
+                         temp
                 ));
     }
 

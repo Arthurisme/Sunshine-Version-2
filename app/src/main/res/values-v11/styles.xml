@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="SettingsTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/MyActionBarSetting</item>
+        <item name="android:actionBarStyle">@style/MyActionBar2</item>
     </style>
 
-    <style name="MyActionBarSetting"
+    <style name="MyActionBar2"
         parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
-        <item name="android:background">@color/sunshine_blue</item>
-        <item name="android:height">56dp</item>
     </style>
-
-
 </resources>

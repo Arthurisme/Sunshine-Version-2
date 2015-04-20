@@ -35,8 +35,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+import com.example.android.sunshine.app.data.CompassView;
+import com.example.android.sunshine.app.data.DirectionView;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+import com.example.android.sunshine.app.data.WindControl;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -92,6 +96,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mHumidityView;
     private TextView mWindView;
     private TextView mPressureView;
+    private DirectionView mWindDirectionView;
+    private CompassView mCompassView;
+    private WindControl mWindControl;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -116,6 +123,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
         mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
         mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
+        mWindDirectionView= (DirectionView) rootView.findViewById(R.id.detail_wind_direction);
+        mCompassView= (CompassView) rootView.findViewById(R.id.detail_wind_compass);
+        mWindControl= (WindControl) rootView.findViewById(R.id.detail_wind_windControl);
+
         return rootView;
     }
 
@@ -187,7 +198,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             Utility.getArtResourceForWeatherCondition(weatherId);
 
-            mIconView.setImageResource(imageDetail);
 
             // Read date from cursor and update views for day of week and date
             long date = data.getLong(COL_WEATHER_DATE);
@@ -199,6 +209,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             // Read description from cursor and update view
             String description = data.getString(COL_WEATHER_DESC);
             mDescriptionView.setText(description);
+            mIconView.setImageResource(imageDetail);
+
+            mIconView.setContentDescription(description);
 
             // Read high temperature from cursor and update view
             boolean isMetric = Utility.isMetric(getActivity());
@@ -220,6 +233,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float windSpeedStr = data.getFloat(COL_WEATHER_WIND_SPEED);
             float windDirStr = data.getFloat(COL_WEATHER_DEGREES);
             mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
+            //set custom view wind direction.
+            mWindDirectionView.setDirection(windDirStr);
+            //set custom view wind direction.
+            mCompassView.setDegrees(windDirStr);
+
+            // Set values to custom view windmill
+            mWindControl.setDegrees(data.getFloat(
+                    data.getColumnIndex(WeatherEntry.COLUMN_DEGREES)));
+            mWindControl.setSpeed(data.getFloat(
+                    data.getColumnIndex(WeatherEntry.COLUMN_WIND_SPEED)));
+
 
             // Read pressure from cursor and update view
             float pressure = data.getFloat(COL_WEATHER_PRESSURE);
