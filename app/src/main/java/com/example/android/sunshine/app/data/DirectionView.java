@@ -6,9 +6,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.Utility;
 
 
 //Created by cchabot on 12/04/2015.
@@ -40,9 +44,27 @@ public DirectionView(Context context, AttributeSet attrs, int defStyleAttr) {
 public void setDirection(float degrees) {
     mDegrees = degrees;
     invalidate();
+
+    final AccessibilityManager am =
+            (AccessibilityManager)(getContext()
+                    .getSystemService(Context.ACCESSIBILITY_SERVICE));
+    if (am.isEnabled()) {
+        sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+    }
 }
 
-private void initCanvas() {
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+
+
+        super.dispatchPopulateAccessibilityEvent(event);
+        Log.v("Description", "dispatchPopulateAccessibilityEvent(): event == " + event);
+        event.getText().add(Float.toString(mDegrees));
+        return true;
+
+    }
+
+    private void initCanvas() {
     mCircle = new Path();
     mDirection = new Path();
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

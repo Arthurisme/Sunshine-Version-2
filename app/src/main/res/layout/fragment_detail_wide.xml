@@ -88,7 +88,10 @@
                 android:layout_width="100px"
                 android:layout_marginLeft="16dp"
                 android:minWidth="100px"
-                android:minHeight="100px"/>
+                android:minHeight="100px"
+                android:contentDescription="@string/DirectionDescriptiontest"
+                android:focusable="true"
+                />
 
             <com.example.android.sunshine.app.data.WindControl
                 android:id="@+id/detail_wind_windControl"
