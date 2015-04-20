@@ -126,8 +126,8 @@
 
             <com.example.android.sunshine.app.data.CompassView
                 android:id="@+id/detail_wind_compass"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_height="200px"
+                android:layout_width="200px"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:minWidth="100px"
