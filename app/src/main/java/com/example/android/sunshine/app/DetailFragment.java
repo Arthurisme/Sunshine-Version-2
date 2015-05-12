@@ -1,18 +1,18 @@
 /*
-* Copyright (C) 2014 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2014 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
@@ -25,7 +25,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,12 +34,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.example.android.sunshine.app.data.CompassView;
-import com.example.android.sunshine.app.data.DirectionView;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
-import com.example.android.sunshine.app.data.WindControl;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -49,12 +44,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     static final String DETAIL_URI = "URI";
-    private Uri mUri;
 
     private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
 
     private ShareActionProvider mShareActionProvider;
     private String mForecast;
+    private Uri mUri;
 
     private static final int DETAIL_LOADER = 0;
 
@@ -68,7 +63,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             WeatherEntry.COLUMN_PRESSURE,
             WeatherEntry.COLUMN_WIND_SPEED,
             WeatherEntry.COLUMN_DEGREES,
-            WeatherEntry.COLUMN_WEATHER_CONDITION_ID,
+            WeatherEntry.COLUMN_WEATHER_ID,
             // This works because the WeatherProvider returns location data joined with
             // weather data, even though they're stored in two different tables.
             WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING
@@ -96,9 +91,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mHumidityView;
     private TextView mWindView;
     private TextView mPressureView;
-    private DirectionView mWindDirectionView;
-    private CompassView mCompassView;
-    private WindControl mWindControl;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -108,10 +100,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-                Bundle arguments = getArguments();
-                 if (arguments != null) {
-                         mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
-                     }
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+        }
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mIconView = (ImageView) rootView.findViewById(R.id.detail_icon);
@@ -123,10 +115,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
         mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
         mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
-        mWindDirectionView= (DirectionView) rootView.findViewById(R.id.detail_wind_direction);
-        mCompassView= (CompassView) rootView.findViewById(R.id.detail_wind_compass);
-        mWindControl= (WindControl) rootView.findViewById(R.id.detail_wind_windControl);
-
         return rootView;
     }
 
@@ -161,31 +149,32 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         super.onActivityCreated(savedInstanceState);
     }
 
+    void onLocationChanged( String newLocation ) {
+        // replace the uri, since the location has changed
+        Uri uri = mUri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updatedUri;
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "In onCreateLoader");
-     //   Intent intent = getActivity().getIntent();
-      //  if (intent == null|| intent.getData() == null) {
-      //      return null;
-
-
-                 if ( null != mUri ) {
-                         // Now create and return a CursorLoader that will take care of
-                                  // creating a Cursor for the data being displayed.
-                                          return new CursorLoader(
-                                           getActivity(),
-                                           mUri,
-                                          DETAIL_COLUMNS,
-                                            null,
-                                           null,
-                                            null
-                                           );
-
-        } return null;
-
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-
+        if ( null != mUri ) {
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    DETAIL_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
+        return null;
     }
 
     @Override
@@ -193,11 +182,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (data != null && data.moveToFirst()) {
             // Read weather condition ID from cursor
             int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
-            // Use placeholder Image
-            int imageDetail=
 
-            Utility.getArtResourceForWeatherCondition(weatherId);
-
+            // Use weather art image
+            mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
             // Read date from cursor and update views for day of week and date
             long date = data.getLong(COL_WEATHER_DATE);
@@ -209,8 +196,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             // Read description from cursor and update view
             String description = data.getString(COL_WEATHER_DESC);
             mDescriptionView.setText(description);
-            mIconView.setImageResource(imageDetail);
 
+            // For accessibility, add a content description to the icon field
             mIconView.setContentDescription(description);
 
             // Read high temperature from cursor and update view
@@ -233,17 +220,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float windSpeedStr = data.getFloat(COL_WEATHER_WIND_SPEED);
             float windDirStr = data.getFloat(COL_WEATHER_DEGREES);
             mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
-            //set custom view wind direction.
-            mWindDirectionView.setDirection(windDirStr);
-            //set custom view wind direction.
-            mCompassView.setDegrees(windDirStr);
-
-            // Set values to custom view windmill
-            mWindControl.setDegrees(data.getFloat(
-                    data.getColumnIndex(WeatherEntry.COLUMN_DEGREES)));
-            mWindControl.setSpeed(data.getFloat(
-                    data.getColumnIndex(WeatherEntry.COLUMN_WIND_SPEED)));
-
 
             // Read pressure from cursor and update view
             float pressure = data.getFloat(COL_WEATHER_PRESSURE);
@@ -261,20 +237,4 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) { }
-
-    void onLocationChanged( String newLocation ) {
-        // replace the uri, since the location has changed
-        Uri uri = mUri;
-        if (null != uri) {
-            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
-            Log.d("2403", "2403 : DetileFragment-onLoaderReset-uri: " + uri);
-            Log.d("2403", "2403 : DetileFragment-onLoaderReset-date: " + date);
-
-            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
-            mUri = updatedUri;
-            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
-
-
-        }
-    }
 }

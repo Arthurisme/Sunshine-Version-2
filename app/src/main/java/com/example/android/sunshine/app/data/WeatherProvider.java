@@ -15,6 +15,7 @@
  */
 package com.example.android.sunshine.app.data;
 
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -22,15 +23,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 public class WeatherProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
-    //private static final UriMatcher sUriMatcher = buildUriMatcher();
-    public static final UriMatcher sUriMatcher = buildUriMatcher();
-
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
     private WeatherDbHelper mOpenHelper;
 
     static final int WEATHER = 100;
@@ -42,6 +39,9 @@ public class WeatherProvider extends ContentProvider {
 
     static{
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
+        
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
         sWeatherByLocationSettingQueryBuilder.setTables(
                 WeatherContract.WeatherEntry.TABLE_NAME + " INNER JOIN " +
                         WeatherContract.LocationEntry.TABLE_NAME +
@@ -51,15 +51,18 @@ public class WeatherProvider extends ContentProvider {
                         "." + WeatherContract.LocationEntry._ID);
     }
 
+    //location.location_setting = ?
     private static final String sLocationSettingSelection =
             WeatherContract.LocationEntry.TABLE_NAME+
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
+
+    //location.location_setting = ? AND date >= ?
     private static final String sLocationSettingWithStartDateSelection =
             WeatherContract.LocationEntry.TABLE_NAME+
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    //WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
-    WeatherContract.WeatherEntry.COLUMN_DATE +" >= ? ";
+                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
 
+    //location.location_setting = ? AND date = ?
     private static final String sLocationSettingAndDaySelection =
             WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
@@ -69,10 +72,7 @@ public class WeatherProvider extends ContentProvider {
         String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
         long startDate = WeatherContract.WeatherEntry.getStartDateFromUri(uri);
 
-        Log.d("2603", "2603 : start Date format " + startDate);
-
-
-                String[] selectionArgs;
+        String[] selectionArgs;
         String selection;
 
         if (startDate == 0) {
@@ -114,7 +114,7 @@ public class WeatherProvider extends ContentProvider {
         and LOCATION integer constants defined above.  You can test this by uncommenting the
         testUriMatcher test within TestUriMatcher.
      */
-    public static UriMatcher buildUriMatcher() {
+    static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
         // expressions instead?  Because you're not crazy, that's why.
 
@@ -172,8 +172,6 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-
-
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
@@ -318,7 +316,7 @@ public class WeatherProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -342,5 +340,15 @@ public class WeatherProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
+    }
+
+    // You do not need to call this method. This is a method specifically to assist the testing
+    // framework in running smoothly. You can read more at:
+    // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
+    @Override
+    @TargetApi(11)
+    public void shutdown() {
+        mOpenHelper.close();
+        super.shutdown();
     }
 }

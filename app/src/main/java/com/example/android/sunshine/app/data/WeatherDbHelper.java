@@ -38,7 +38,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Create a table to hold l  ocations.  A location consists of the string supplied in the
+        // Create a table to hold locations.  A location consists of the string supplied in the
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
                 LocationEntry._ID + " INTEGER PRIMARY KEY," +
@@ -60,7 +60,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
-                WeatherEntry.COLUMN_WEATHER_CONDITION_ID + " INTEGER NOT NULL," +
+                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
 
                 WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
                 WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +

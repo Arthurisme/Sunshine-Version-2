@@ -23,9 +23,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -38,24 +35,9 @@ import android.support.v7.app.ActionBarActivity;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
-
-            ////not work- Show the Up button in the action bar.
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getActionBar().setDisplayShowHomeEnabled(true);
-
-             //getActionBar().setDisplayUseLogoEnabled(true);
-            //getActionBar().setDisplayShowTitleEnabled(true);
-
-
-
         // Add 'general' preferences, defined in the XML file
         addPreferencesFromResource(R.xml.pref_general);
 
@@ -104,6 +86,6 @@ public class SettingsActivity extends PreferenceActivity
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public Intent getParentActivityIntent() {
-        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);}
-
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    }
 }

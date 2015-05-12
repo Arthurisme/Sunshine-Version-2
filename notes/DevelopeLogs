@@ -21,3 +21,5 @@ listview item with a different view.
 8, I studyed how to remember the postion when rotate big screen machine, now let me do in small machine.
 
 9,The autometaclly active today layout can be done by another way.(postion smooth scrool to today)
+
+10; if I delete the android: name in activity_main.xml, and modifing the code in main.java, how can i do this make the app run as modified before?
