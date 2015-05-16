@@ -19,10 +19,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
@@ -86,6 +88,44 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
         if (id == R.id.action_map) {
             openPreferredLocationInMap();
+            return true;
+        }
+        if (id == R.id.new_function) {
+            //Intent it=new Intent(this,SunshineSyncAdapter.notifyWeather);
+
+            //delete test:
+             String sDaySelectionHistory =
+
+                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+
+            //long startDate = WeatherContract.WeatherEntry.getStartDateFromUri(uri);
+            //String[]  selectionArgs = new String[]{ Long.toString(startDate)};
+            long dateTime;
+            Time dayTime = new Time();
+            Log.d("2403", "2403 : Main-dayTime1: " + dayTime);
+            dayTime.setToNow();
+            Log.d("2403", "2403 : Main-dayTime2: " + dayTime);
+            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+            Log.d("2403", "2403 : Main-julianStartDay: " + julianStartDay);
+            //dayTime = new Time();
+            Log.d("2403", "2403 : Main-dayTime3: " + dayTime);
+            dateTime = dayTime.setJulianDay(julianStartDay);
+            Log.d("2403", "2403 : Main-dateTime: " + dateTime);
+
+            String locationSetting = Utility.getPreferredLocation(this.getApplication());
+            Uri uriDefault= WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, dateTime);
+            Log.d("2403", "2403 : Main-uriDefault: " + uriDefault);
+
+            //String[]  selectionArgs = new String[]{ "1431662400000" };
+            String[]  selectionArgs = new String[]{  Long.toString(dateTime) };
+
+            this.getContentResolver().delete(
+                    WeatherContract.WeatherEntry.CONTENT_URI,
+                    sDaySelectionHistory,
+                    selectionArgs
+            );
+
+            //
             return true;
         }
         return super.onOptionsItemSelected(item);
