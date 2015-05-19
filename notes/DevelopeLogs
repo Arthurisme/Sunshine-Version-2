@@ -23,3 +23,5 @@ listview item with a different view.
 9,The autometaclly active today layout can be done by another way.(postion smooth scrool to today)
 
 10; if I delete the android: name in activity_main.xml, and modifing the code in main.java, how can i do this make the app run as modified before?
+
+11: testing new android studio 1.2
